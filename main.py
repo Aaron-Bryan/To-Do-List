@@ -15,9 +15,24 @@ class To_do_list(tk.Tk):
         style = Style(theme="flatly")
         style.configure("Custon.TEntry", foreground="gray")
 
-        #Input field for additional tasks you want to add
+        #Input field for additional tasks the user ads
         self.input_task = ttk.Entry(self, font=("TkDefaultFont", 16), width=30, style="Custon.TEntry")
-        self.input_task.pack(padx=10, pady=10)
+        self.input_task.pack(pady=10, padx=10)
 
         #Place holder for the input field
         self.input_task.insert(0, "Enter the task you want to do: ")
+
+        #Event to clear the placeholder when you click the input field
+        self.input_task.bind("<FocusIN>", self.clear_placeholder)
+        #Event to restore placeholder when the input field loses focus
+        self.input_task.bind("<FocusOut>", self.restore_placeholder)
+
+        #Button for adding the tasks onto the list
+        ttk.Button(self, text="Add task", command=self.add_task).pack(pady=5, padx=5)
+
+        #Listbox for the tasks.
+        self.task_list = tk.Listbox (self, font=("TkDefaultFont", 16), height=10, selectmode=tk.NONE)
+        self.task_list.pack(fill=tk.BOTH, expand=True, pady=10, padx=10)
+
+
+        ## TODO The actual functions lmao
