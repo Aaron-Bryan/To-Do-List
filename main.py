@@ -13,4 +13,11 @@ class To_do_list(tk.Tk):
         self.geometry("400x400")
 
         style = Style(theme="flatly")
-        style.configure("Test.Text", foreground="gray")
+        style.configure("Custon.TEntry", foreground="gray")
+
+        #Input field for additional tasks you want to add
+        self.input_task = ttk.Entry(self, font=("TkDefaultFont", 16), width=30, style="Custon.TEntry")
+        self.input_task.pack(padx=10, pady=10)
+
+        #Place holder for the input field
+        self.input_task.insert(0, "Enter the task you want to do: ")
