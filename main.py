@@ -78,7 +78,10 @@ class To_do_list(tk.Tk):
                 self.input_task.configure(style="TEntry")
 
         def restore_placeholder(self):
-            pass
+
+            if (self.input_task.get() == ""):
+                self.input_task.insert(0, "Add Task")
+                self.input_task.configure(style="Custon.TEntry")
 
         def load_task(self):
             pass
