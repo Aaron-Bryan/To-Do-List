@@ -34,5 +34,11 @@ class To_do_list(tk.Tk):
         self.task_list = tk.Listbox (self, font=("TkDefaultFont", 16), height=10, selectmode=tk.NONE)
         self.task_list.pack(fill=tk.BOTH, expand=True, pady=10, padx=10)
 
+        #Buttons to mark the tasks as done.
+        ttk.Button(self, text="Done", style="success.TButton", command=self.mark_done).pack(side=tk.LEFT, pady=10, padx=10)
+        ttk.Button(self, text="Delete", style="danger.TButton", command=self.delete_task).pack(side=tk.LEFT, pady=10,padx=10)
+
+
+
 
         ## TODO The actual functions lmao
