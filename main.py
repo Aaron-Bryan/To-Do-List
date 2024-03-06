@@ -50,7 +50,7 @@ class To_do_list(tk.Tk):
             total_count = self.task_list.size()
 
             for i in range(total_count):
-                if self.task_list.itemget(i, "fg") == "green":
+                if (self.task_list.itemget(i, "fg") == "green"):
                     done_count = done_count + 1
 
             messagebox.showinfo("Task Statistics", f"Total tasks: {total_count}\nCompleted tasks: {done_count}")
@@ -65,10 +65,17 @@ class To_do_list(tk.Tk):
                 self.save_task()
 
         def delete_task(self):
-            pass
+            task_position = self.task_list.curselection()
+
+            if (task_position == True):
+                self.task_list.delete(task_position)
+                self.save_task()
 
         def clear_placeholder(self):
-            pass
+
+            if (self.input_task.get() == "Add Task"):
+                self.input_task.delete(0, tk.END)
+                self.input_task.configure(style="TEntry")
 
         def restore_placeholder(self):
             pass
