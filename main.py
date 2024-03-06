@@ -36,9 +36,12 @@ class To_do_list(tk.Tk):
 
         #Buttons to mark the tasks as done.
         ttk.Button(self, text="Done", style="success.TButton", command=self.mark_done).pack(side=tk.LEFT, pady=10, padx=10)
-        ttk.Button(self, text="Delete", style="danger.TButton", command=self.delete_task).pack(side=tk.LEFT, pady=10,padx=10)
+        ttk.Button(self, text="Delete", style="danger.TButton", command=self.delete_task).pack(side=tk.RIGHT, pady=10,padx=10)
+
+        #Button to display tast status
+        ttk.Button(self, text="View Status", style="info.TButton", command=self.view_stats).pack(side=tk.BOTTOM, pady=10, padx=10)
+
+        self.load_tasks()
 
 
-
-
-        ## TODO The actual functions lmao
+        #Functions
