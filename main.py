@@ -10,7 +10,7 @@ class To_do_list(tk.Tk):
 
         #Initialize the View
         self.title("To Do List")
-        self.geometry("400x400")
+        self.geometry("600x600")
 
         style = Style(theme="flatly")
         style.configure("Custon.TEntry", foreground="gray")
@@ -35,13 +35,50 @@ class To_do_list(tk.Tk):
         self.task_list.pack(fill=tk.BOTH, expand=True, pady=10, padx=10)
 
         #Buttons to mark the tasks as done.
-        ttk.Button(self, text="Done", style="success.TButton", command=self.mark_done).pack(side=tk.LEFT, pady=10, padx=10)
+        ttk.Button(self, text="Done", style="success.TButton", command=self.done_task).pack(side=tk.LEFT, pady=10, padx=10)
         ttk.Button(self, text="Delete", style="danger.TButton", command=self.delete_task).pack(side=tk.RIGHT, pady=10,padx=10)
 
         #Button to display tast status
         ttk.Button(self, text="View Status", style="info.TButton", command=self.view_stats).pack(side=tk.BOTTOM, pady=10, padx=10)
 
-        self.load_tasks()
+        self.load_task()
 
 
         #Functions
+        def view_stats(self):
+            done_count = 0
+            total_count = self.task_list.size()
+
+            for i in range(total_count):
+                if self.task_list.itemget(i, "fg") == "green":
+                    done_count = done_count + 1
+
+            messagebox.showinfo("Task Statistics", f"Total tasks: {total_count}\nCompleted tasks: {done_count}")
+
+        def add_task(self):
+            task = self.input_task.get()
+
+            if ((task != "Add Task") and (task != "")):
+                self.task_list.insert(tk.END, task)
+                self.task_list.itemconfig(tk.END, fg="orange")
+                self.input_task.delete(0, tk.END)
+                self.save_task()
+
+        def delete_task(self):
+            pass
+
+        def clear_placeholder(self):
+            pass
+
+        def restore_placeholder(self):
+            pass
+
+        def load_task(self):
+            pass
+
+        def save_task(self):
+            pass
+
+if __name__ == '__main__':
+    app = To_do_list()
+    app.mainloop()
