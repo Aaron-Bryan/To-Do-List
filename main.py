@@ -1,94 +1,122 @@
-# This is a To Do List App made with Python and Tkinter
-
 import tkinter as tk
 from tkinter import ttk, messagebox
 from ttkbootstrap import Style
 import json
 
-class To_do_list(tk.Tk):
+
+class To_do_list_app(tk.Tk):
     def __init__(self):
+        super().__init__()
 
-        #Initialize the View
-        self.title("To Do List")
-        self.geometry("600x600")
-
+        self.title("Todo List")
+        self.geometry("650x550")
         style = Style(theme="flatly")
         style.configure("Custon.TEntry", foreground="gray")
 
-        #Input field for additional tasks the user ads
+        # Create input field for adding tasks
         self.input_task = ttk.Entry(self, font=("TkDefaultFont", 16), width=30, style="Custon.TEntry")
-        self.input_task.pack(pady=10, padx=10)
+        self.input_task.pack(pady=10)
 
-        #Place holder for the input field
-        self.input_task.insert(0, "Enter the task you want to do: ")
+        # Set input field placeholder
+        self.input_task.insert(0, "Add task")
 
-        #Event to clear the placeholder when you click the input field
-        self.input_task.bind("<FocusIN>", self.clear_placeholder)
-        #Event to restore placeholder when the input field loses focus
+        # Bind Event to clear placeholder when input field is clicked
+        self.input_task.bind("<FocusIn>", self.clear_placeholder)
+        # Bind Event to restore placeholder when input field loses focus
         self.input_task.bind("<FocusOut>", self.restore_placeholder)
 
-        #Button for adding the tasks onto the list
-        ttk.Button(self, text="Add task", command=self.add_task).pack(pady=5, padx=5)
+        # Button to adding tasks
+        ttk.Button(self, text="Add", command=self.add_task).pack(pady=5)
 
-        #Listbox for the tasks.
-        self.task_list = tk.Listbox (self, font=("TkDefaultFont", 16), height=10, selectmode=tk.NONE)
-        self.task_list.pack(fill=tk.BOTH, expand=True, pady=10, padx=10)
+        # Create listbox to display added tasks
+        self.task_list = tk.Listbox(self, font=("TkDefaultFont", 16), height=10, selectmode=tk.NONE)
+        self.task_list.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
 
-        #Buttons to mark the tasks as done.
-        ttk.Button(self, text="Done", style="success.TButton", command=self.done_task).pack(side=tk.LEFT, pady=10, padx=10)
-        ttk.Button(self, text="Delete", style="danger.TButton", command=self.delete_task).pack(side=tk.RIGHT, pady=10,padx=10)
+        # Buttons for marking tasks as done or deleting them
+        ttk.Button(self, text="Done", style="success.TButton", command=self.finish_task).pack(side=tk.LEFT, padx=10, pady=10)
+        ttk.Button(self, text="Delete", style="danger.TButton",command=self.delete_task).pack(side=tk.RIGHT, padx=10, pady=10)
 
-        #Button to display tast status
-        ttk.Button(self, text="View Status", style="info.TButton", command=self.view_stats).pack(side=tk.BOTTOM, pady=10, padx=10)
+        # Create buttton for displaying task statistics
+        ttk.Button(self, text="View Stats", style="info.TButton", command=self.view_status).pack(side=tk.BOTTOM, pady=10)
 
-        self.load_task()
+        self.load_tasks()
 
+    #Functions
 
-        #Functions
-        def view_stats(self):
-            done_count = 0
-            total_count = self.task_list.size()
+    # Function to view the current status of the task
+    def view_status(self):
+        done_count = 0
+        total_count = self.task_list.size()
 
-            for i in range(total_count):
-                if (self.task_list.itemget(i, "fg") == "green"):
-                    done_count = done_count + 1
+        for i in range(total_count):
+            if self.task_list.itemcget(i, "fg") == "green":
+                done_count += 1
+        messagebox.showinfo("Task Statistics", f"Total tasks: {total_count}\nCompleted tasks: {done_count}")
 
-            messagebox.showinfo("Task Statistics", f"Total tasks: {total_count}\nCompleted tasks: {done_count}")
+    #Function to add tasks
+    def add_task(self):
+        task = self.input_task.get()
 
-        def add_task(self):
-            task = self.input_task.get()
+        if task != "Add Task":
+            self.task_list.insert(tk.END, task)
+            self.task_list.itemconfig(tk.END, fg="orange")
+            self.input_task.delete(0, tk.END)
+            self.save_tasks()
 
-            if ((task != "Add Task") and (task != "")):
-                self.task_list.insert(tk.END, task)
-                self.task_list.itemconfig(tk.END, fg="orange")
-                self.input_task.delete(0, tk.END)
-                self.save_task()
+    #Function to mark the tasks as done
+    def finish_task(self):
+        task_index = self.task_list.curselection()
 
-        def delete_task(self):
-            task_position = self.task_list.curselection()
+        if task_index:
+            self.task_list.itemconfig(task_index, fg="green")
+            self.save_tasks()
 
-            if (task_position == True):
-                self.task_list.delete(task_position)
-                self.save_task()
+    #Function to delete tasks
+    def delete_task(self):
+        task_index = self.task_list.curselection()
 
-        def clear_placeholder(self):
+        if task_index:
+            self.task_list.delete(task_index)
+            self.save_tasks()
 
-            if (self.input_task.get() == "Add Task"):
-                self.input_task.delete(0, tk.END)
-                self.input_task.configure(style="TEntry")
+    #Function to clear the place holder text
+    def clear_placeholder(self, event):
 
-        def restore_placeholder(self):
+        if self.input_task.get() == "Add Task":
+            self.input_task.delete(0, tk.END)
+            self.input_task.configure(style="TEntry")
 
-            if (self.input_task.get() == ""):
-                self.input_task.insert(0, "Add Task")
-                self.input_task.configure(style="Custon.TEntry")
+    #Function to restore the place holder
+    def restore_placeholder(self, event):
 
-        def load_task(self):
+        if self.input_task.get() == "":
+            self.input_task.insert(0, "Add Task")
+            self.input_task.configure(style="Custom.TEntry")
+
+    def load_tasks(self):
+        try:
+            with open("tasks.json", "r") as f:
+                data = json.load(f)
+
+                for task in data:
+                    self.task_list.insert(tk.END, task["text"])
+                    self.task_list.itemconfig(tk.END, fg=task["color"])
+
+        except FileNotFoundError:
             pass
 
-        def save_task(self):
-            pass
+    def save_tasks(self):
+        data = []
+
+        for i in range(self.task_list.size()):
+            text = self.task_list.get(i)
+            color = self.task_list.itemcget(i, "fg")
+            data.append({"text": text, "color": color})
+
+        with open("tasks.json", "w") as f:
+            json.dump(data, f)
+
 
 if __name__ == '__main__':
-    app = To_do_list()
+    app = To_do_list_app()
     app.mainloop()
