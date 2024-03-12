@@ -42,8 +42,7 @@ class To_do_list_app(tk.Tk):
         self.load_tasks()
 
     #Functions
-
-    # Function to view the current status of the task
+    #Function to view the current status of the task
     def view_status(self):
         done_count = 0
         total_count = self.task_list.size()
